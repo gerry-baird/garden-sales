@@ -25,8 +25,6 @@ const INITIAL_FORM_STATE = {
   category: "N",
 };
 
-//const validWarranty = /^\d{3}-\d{4}$/.test(tw.local.warrantyNumber);
-
 const FORM_VALIDATION = Yup.object().shape({
   firstName: Yup.string().required("Required"),
   lastName: Yup.string().required("Required"),
@@ -47,8 +45,10 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
   },
-  formButtons: {
+  buttonArea: {
     marginTop: theme.spacing(1),
+    display: "flex",
+    justifyContent: "space-between",
   },
 }));
 
@@ -64,7 +64,7 @@ const WarrantyForm = () => {
           console.log(values);
         }}
       >
-        {({ dirty, isValid }) => (
+        {({ dirty, isValid, handleReset }) => (
           <Form>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -185,13 +185,21 @@ const WarrantyForm = () => {
                 />
               </Grid>
             </Grid>
-            <Grid item xs={6} className={classes.formButtons}>
+            <Grid item xs={6} className={classes.buttonArea}>
               <Button
                 variant="contained"
                 color="primary"
+                type="submit"
                 disabled={!dirty || !isValid}
               >
                 Submit
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleReset}
+              >
+                Reset
               </Button>
             </Grid>
           </Form>
