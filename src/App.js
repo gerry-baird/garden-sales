@@ -1,20 +1,13 @@
-import {
-  makeStyles,
-  CssBaseline,
-  Paper,
-  createMuiTheme,
-  ThemeProvider,
-} from "@material-ui/core";
+import { makeStyles, CssBaseline, Paper, Container } from "@material-ui/core";
 
 import Header from "./components/Header";
-import InvForm from "./components/InvForm";
-
-const theme = createMuiTheme({});
+import WarrantyForm from "./components/WarrantyForm";
 
 const useStyles = makeStyles((theme) => ({
   pageContent: {
-    margin: theme.spacing(5),
-    padding: theme.spacing(3),
+    margin: theme.spacing(2),
+    padding: theme.spacing(2),
+    paddingTop: "1px",
   },
 }));
 
@@ -23,9 +16,11 @@ function App() {
   return (
     <div>
       <Header />
-      <Paper className={classes.pageContent}>
-        <InvForm />
-      </Paper>
+      <Container maxWidth="md">
+        <Paper className={classes.pageContent} maxWidth="md">
+          <WarrantyForm />
+        </Paper>
+      </Container>
       <CssBaseline />
     </div>
   );

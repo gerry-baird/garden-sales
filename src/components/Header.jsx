@@ -61,7 +61,7 @@ export default function Header() {
             <MenuItem onClick={handleClose}>Logout</MenuItem>
           </Menu>
           <Typography variant="h6" className={classes.title}>
-            Sales Invoice Entry
+            Warranty Registration
           </Typography>
 
           <IconButton>
