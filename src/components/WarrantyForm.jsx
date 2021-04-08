@@ -15,6 +15,9 @@ import DateFnsUtils from "@date-io/date-fns";
 import { TextField, CheckboxWithLabel } from "formik-material-ui";
 import { DatePicker } from "formik-material-ui-pickers";
 
+import { useDispatch } from "react-redux";
+import { addWarranty } from "../redux/WarrantySlice";
+
 const INITIAL_FORM_STATE = {
   firstName: "",
   lastName: "",
@@ -58,14 +61,23 @@ const useStyles = makeStyles((theme) => ({
 
 const WarrantyForm = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   return (
     <Grid container className={classes.formWrapper}>
       <Formik
         initialValues={{ ...INITIAL_FORM_STATE }}
         validationSchema={FORM_VALIDATION}
-        onSubmit={(values) => {
+        onSubmit={(values, { setSubmitting, resetForm }) => {
+          dispatch(
+            addWarranty({
+              id: values.installerID,
+              firstName: values.firstName,
+            })
+          );
           console.log(values);
+          setSubmitting(false);
+          resetForm();
         }}
       >
         {({ dirty, isValid, handleReset }) => (
