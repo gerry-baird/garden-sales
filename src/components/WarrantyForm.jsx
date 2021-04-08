@@ -7,10 +7,13 @@ import {
   MenuItem,
   FormControl,
 } from "@material-ui/core";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
+import DateFnsUtils from "@date-io/date-fns";
 
 import { TextField, CheckboxWithLabel } from "formik-material-ui";
+import { DatePicker } from "formik-material-ui-pickers";
 
 const INITIAL_FORM_STATE = {
   firstName: "",
@@ -23,6 +26,7 @@ const INITIAL_FORM_STATE = {
   postcode: "",
   demonstrated: "",
   category: "N",
+  date: new Date(),
 };
 
 const FORM_VALIDATION = Yup.object().shape({
@@ -65,144 +69,156 @@ const WarrantyForm = () => {
         }}
       >
         {({ dirty, isValid, handleReset }) => (
-          <Form>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Typography>Installer Details</Typography>
-              </Grid>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <Form>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Typography>Installation Details</Typography>
+                </Grid>
 
-              <Grid item xs={6}>
-                <Field
-                  component={TextField}
-                  variant="outlined"
-                  name="installerID"
-                  label="ID"
-                  fullWidth
-                />
-              </Grid>
-
-              <Grid item xs={12}>
-                <Typography>Customer Details</Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Field
-                  component={TextField}
-                  variant="outlined"
-                  name="firstName"
-                  label="First Name"
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <Field
-                  component={TextField}
-                  variant="outlined"
-                  name="lastName"
-                  label="Last Name"
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Field
-                  component={TextField}
-                  variant="outlined"
-                  name="addressLine1"
-                  label="Address Line 1"
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Field
-                  component={TextField}
-                  variant="outlined"
-                  name="addressLine2"
-                  label="Address Line 2"
-                  fullWidth
-                />
-              </Grid>
-
-              <Grid item xs={6}>
-                <Field
-                  component={TextField}
-                  variant="outlined"
-                  name="city"
-                  label="Town or City"
-                  fullWidth
-                />
-              </Grid>
-
-              <Grid item xs={6}>
-                <Field
-                  component={TextField}
-                  variant="outlined"
-                  name="postcode"
-                  label="Postcode"
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <Field
-                  component={TextField}
-                  variant="outlined"
-                  name="phone"
-                  label="Mobile Number"
-                  fullWidth
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Typography>Installation Details</Typography>
-              </Grid>
-
-              <Grid item xs={3}>
-                <FormControl>
+                <Grid item xs={6}>
                   <Field
                     component={TextField}
-                    type="text"
-                    label="Product Type"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    name="category"
-                    select
                     variant="outlined"
-                    inputProps={{
-                      id: "category",
-                    }}
-                  >
-                    <MenuItem value="N">None Selected</MenuItem>
-                    <MenuItem value="P">Pizza Oven</MenuItem>
-                    <MenuItem value="H">Hot Tub</MenuItem>
-                    <MenuItem value="F">Furniture</MenuItem>
-                  </Field>
-                </FormControl>
+                    name="installerID"
+                    label="Installer ID"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Field
+                    component={DatePicker}
+                    name="date"
+                    label="Installation Date"
+                    variant="inline"
+                    inputVariant="outlined"
+                    fullWidth
+                    format="dd/MM/yyyy"
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography>Customer Details</Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Field
+                    component={TextField}
+                    variant="outlined"
+                    name="firstName"
+                    label="First Name"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Field
+                    component={TextField}
+                    variant="outlined"
+                    name="lastName"
+                    label="Last Name"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Field
+                    component={TextField}
+                    variant="outlined"
+                    name="addressLine1"
+                    label="Address Line 1"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Field
+                    component={TextField}
+                    variant="outlined"
+                    name="addressLine2"
+                    label="Address Line 2"
+                    fullWidth
+                  />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <Field
+                    component={TextField}
+                    variant="outlined"
+                    name="city"
+                    label="Town or City"
+                    fullWidth
+                  />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <Field
+                    component={TextField}
+                    variant="outlined"
+                    name="postcode"
+                    label="Postcode"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Field
+                    component={TextField}
+                    variant="outlined"
+                    name="phone"
+                    label="Mobile Number"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography>Installation Details</Typography>
+                </Grid>
+
+                <Grid item xs={3}>
+                  <FormControl fullWidth>
+                    <Field
+                      component={TextField}
+                      type="text"
+                      label="Product Type"
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      name="category"
+                      select
+                      variant="outlined"
+                      inputProps={{
+                        id: "category",
+                      }}
+                    >
+                      <MenuItem value="N">None Selected</MenuItem>
+                      <MenuItem value="P">Pizza Oven</MenuItem>
+                      <MenuItem value="H">Hot Tub</MenuItem>
+                      <MenuItem value="F">Furniture</MenuItem>
+                    </Field>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={3}>
+                  <Field
+                    component={CheckboxWithLabel}
+                    type="checkbox"
+                    name="demonstrated"
+                    Label={{ label: "Demonstrated" }}
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={3}>
-                <Field
-                  component={CheckboxWithLabel}
-                  type="checkbox"
-                  name="demonstrated"
-                  Label={{ label: "Demonstrated" }}
-                />
+              <Grid item xs={6} className={classes.buttonArea}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                  disabled={!dirty || !isValid}
+                >
+                  Submit
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={handleReset}
+                >
+                  Reset
+                </Button>
               </Grid>
-            </Grid>
-            <Grid item xs={6} className={classes.buttonArea}>
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                disabled={!dirty || !isValid}
-              >
-                Submit
-              </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleReset}
-              >
-                Reset
-              </Button>
-            </Grid>
-          </Form>
+            </Form>
+          </MuiPickersUtilsProvider>
         )}
       </Formik>
     </Grid>
