@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   makeStyles,
   Grid,
@@ -8,20 +8,21 @@ import {
   FormControl,
 } from "@material-ui/core";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, useFormikContext } from "formik";
 import * as Yup from "yup";
 import DateFnsUtils from "@date-io/date-fns";
 
 import { TextField, CheckboxWithLabel } from "formik-material-ui";
 import { DatePicker } from "formik-material-ui-pickers";
 
-import { useDispatch } from "react-redux";
-import { addWarranty } from "../redux/WarrantySlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addWarranty, getID } from "../redux/WarrantySlice";
 
 const INITIAL_FORM_STATE = {
   firstName: "",
   lastName: "",
   installerID: "",
+  orderID: "",
   phone: "",
   addressLine1: "",
   addressLine2: "",
@@ -30,12 +31,18 @@ const INITIAL_FORM_STATE = {
   demonstrated: "",
   category: "N",
   date: new Date(),
+  warrantyID: "- - - -",
 };
 
 const FORM_VALIDATION = Yup.object().shape({
   firstName: Yup.string().required("Required"),
   lastName: Yup.string().required("Required"),
-  installerID: Yup.string().matches(/^\d{3}-\d{4}$/, "Format must be ###-####"),
+  orderID: Yup.string()
+    .required("Required")
+    .matches(/^\d{5}$/, "Format must be #####"),
+  installerID: Yup.string()
+    .required("Required")
+    .matches(/^\d{3}-\d{4}$/, "Format must be ###-####"),
   phone: Yup.number()
     .integer()
     .typeError("Please enter a valid phone number")
@@ -59,30 +66,49 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const buildWarrantyData = (formValues) => {
+  let warranty = { ...formValues };
+  let date = warranty.date;
+  warranty.date = date.toJSON();
+  return warranty;
+};
+
+const FormHelper = () => {
+  const warrantyID = useSelector((state) => state.installation.warrantyID);
+  const formik = useFormikContext();
+
+  useEffect(() => {
+    if (warrantyID) {
+      console.log("UseEffect warrantyID has been updated :");
+      console.log(warrantyID);
+
+      formik.setFieldValue("warrantyID", warrantyID);
+    }
+  }, [warrantyID]);
+  return null;
+};
+
 const WarrantyForm = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-
   return (
     <Grid container className={classes.formWrapper}>
       <Formik
         initialValues={{ ...INITIAL_FORM_STATE }}
         validationSchema={FORM_VALIDATION}
         onSubmit={(values, { setSubmitting, resetForm }) => {
-          dispatch(
-            addWarranty({
-              id: values.installerID,
-              firstName: values.firstName,
-            })
-          );
-          console.log(values);
+          let warranty = buildWarrantyData(values);
+          dispatch(addWarranty(warranty));
+
+          dispatch(getID(warranty));
           setSubmitting(false);
-          resetForm();
+          //resetForm();
         }}
       >
         {({ dirty, isValid, handleReset }) => (
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <Form>
+              <FormHelper />
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <Typography>Installation Details</Typography>
@@ -106,6 +132,15 @@ const WarrantyForm = () => {
                     inputVariant="outlined"
                     fullWidth
                     format="dd/MM/yyyy"
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Field
+                    component={TextField}
+                    variant="outlined"
+                    name="orderID"
+                    label="Order ID"
+                    fullWidth
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -209,6 +244,16 @@ const WarrantyForm = () => {
                     type="checkbox"
                     name="demonstrated"
                     Label={{ label: "Demonstrated" }}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <Field
+                    component={TextField}
+                    variant="outlined"
+                    name="warrantyID"
+                    label="Warranty Number"
+                    fullWidth
+                    disabled
                   />
                 </Grid>
               </Grid>

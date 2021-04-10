@@ -4,6 +4,6 @@ import warrantyReducer from "./WarrantySlice";
 
 export default configureStore({
   reducer: {
-    warranties: warrantyReducer,
+    installation: warrantyReducer,
   },
 });
