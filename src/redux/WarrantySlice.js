@@ -11,12 +11,14 @@ export const getID = createAsyncThunk("warranty/getID", async (warranty) => {
 export const warrantySlice = createSlice({
   name: "warranty",
   initialState: {
-    warrantyID: null,
+    warrantyID: "- - - -",
     warranty: {},
     count: 0,
   },
   reducers: {
     addWarranty: (state, action) => {
+      //Reset the warrantyID
+      state.warrantyID = "- - - -";
       state.count = state.count + 1;
       state.warranty = action.payload;
     },
